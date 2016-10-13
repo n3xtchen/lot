@@ -84,7 +84,7 @@ high_speed_path = [
 ]
 
 TRAIN_STOP = 0
-TRAIN_RUN = 1
+TRAIN_RUN = 3
 TRAIN_BACK = 2
 TRAIN_HIGH = 3
 
@@ -99,38 +99,40 @@ class Train(object):
         self.speed = 1 # 速度, 1: 正常, 2: 加速
 
     def find_a_way_out_from(self, n, trains):
-        path = paths[n]
-        x =  [x.occupied for x in trains.values()]
-        occupied = set(reduce(lambda x, y: x+y, x)) - set(self.occupied)
-        targets = list(set(path.keys()) - occupied)
-        if len(targets) >= 1:
-            r_int = random.randint(0, len(targets)-1)
-            node = targets[r_int]
-            return {"id": node, "servo": path[node]} 
-        else:
-            return False
+        try:
+            path = paths[n]
+            x =  [x.occupied for x in trains.values()]
+            occupied = set(reduce(lambda x, y: x+y, x)) - set(self.occupied)
+            targets = list(set(path.keys()) - occupied)
+            if len(targets) >= 1:
+                r_int = random.randint(0, len(targets)-1)
+                node = targets[r_int]
+                return {"id": node, "servo": path[node]} 
+            else:
+                return False
+        except:
+            print "我在{},但是当前节点无法识别".format(self.at)
 
     def next(self, trains, source=None):
         if source == None:
             source = self.at
         target = self.find_a_way_out_from(source, trains)
-        print self.id, "should go", target
+        print self.id, "at" , source, "should go", target
         if target != False:
             self.occupied = [source, target["id"]]
             if target["servo"]:
                 self.status = 0
-                self.sender.send('outputs', str(self.id), TRAIN_STOP)
-                print target
+                self.sender.send('outputs', str(int(self.id)+2), TRAIN_STOP)
                 for servo in target["servo"]:
                     servo_id, status = servo.split(":")
                     print "扳道"
-                    self.sender.send('outputs', str(servo_id), status)
+                    self.sender.send('outputs', str(int(servo_id)+7), status)
                 time.sleep(WAIT_SERVO_TIME)   # 等待操作完成
             self.speed = 1 if self.occupied not in high_speed_path else 2
             self.status = 1
-            self.sender.send('outputs', str(self.id), TRAIN_RUN if self.speed == 1 else TRAIN_HIGH)
+            self.sender.send('outputs', str(int(self.id)+2), TRAIN_RUN if self.speed == 1 else TRAIN_HIGH)
         else:
             self.status = 0
             self.at = source
-            self.sender.send('outputs', str(self.id), TRAIN_STOP)
+            self.sender.send('outputs', str(int(self.id)+1), TRAIN_STOP)
 
