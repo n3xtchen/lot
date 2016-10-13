@@ -1,0 +1,31 @@
+{
+  "name": "traffic_wonder",
+  "version": "1.0.0",
+  "description": "交通调度",
+  "main": "app.js",
+  "scripts": {
+    "dev": "nodemon ./app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/n3xtchen/lot.git"
+  },
+  "keywords": [
+    "IoT"
+  ],
+  "author": "n3xtchen <echenwen@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/n3xtchen/lot/issues"
+  },
+  "homepage": "https://github.com/n3xtchen/lot#readme",
+  "devDependencies": {
+    "nodemon": "^1.11.0",
+    "restify": "^4.1.1"
+  },
+  "dependencies": {
+    "sqlite3": "^3.1.6",
+    "sequelize": "^3.24.3"
+  }
+}

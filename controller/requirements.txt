@@ -1,0 +1,7 @@
+MinimalModbus==0.7
+PyQRCode==1.2.1
+colorama==0.3.7
+configparser==3.5.0
+paho-mqtt==1.2
+pyserial==3.1.1
+wsgiref==0.1.2
